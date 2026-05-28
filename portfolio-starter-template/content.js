@@ -5,31 +5,31 @@
 */
 
 window.PORTFOLIO_CONTENT = {
-  name: "Your Name",
-  initials: "YOU",
+  name: "Danny Mattar",
+  initials: "DM",
   title: "Student, builder, and problem solver",
-  location: "City, State",
-  email: "you@example.com",
+  location: "Crestview, KY",
+  email: "Danny.Mattar@outlook.com",
   resumeUrl: "",
   avatarImage: "",
 
   hero: {
     eyebrow: "Personal Portfolio",
-    title: "Hi, I am Your Name.",
+    title: "Hi, I am Danny Mattar.",
     intro:
-      "Use this space for a two-sentence pitch. Say what you study or do, what kinds of projects you enjoy, and what you are looking for next."
+      "Use this spa9hg7g8g88ce for a two-sentence pitch. Say what you study or do, what kinds of projects you enjoy, and what you are looking for next."
   },
 
   quickFacts: [
-    { label: "Focus", value: "Software and design" },
-    { label: "Location", value: "City, State" },
+    { label: "Focus", value: "Software and automation" },
+    { label: "Location", value: "Crestview, KY" },
     { label: "Looking for", value: "Internships, projects, collaborators" }
   ],
 
   socialLinks: [
-    { label: "GitHub", href: "https://github.com/your-username" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/your-name" },
-    { label: "Email", href: "mailto:you@example.com" }
+    { label: "GitHub", href: "https://github.com/danmattar-eng" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/danny-mattar" },
+    { label: "Email", href: "mailto:Danny.Mattar@outlook.com" }
   ],
 
   about: {
@@ -54,7 +54,7 @@ window.PORTFOLIO_CONTENT = {
       type: "experience",
       title: "Role or Internship",
       organization: "Company or Organization",
-      period: "Summer 2025",
+      period: "Summer 2027",
       location: "Remote or City, State",
       summary: "Describe what you owned and what changed because of your work.",
       highlights: ["Built or improved a feature", "Worked with a team or presented results"]
