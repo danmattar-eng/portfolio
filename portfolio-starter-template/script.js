@@ -1,6 +1,10 @@
 const content = window.PORTFOLIO_CONTENT || {};
 const root = document.documentElement;
 const themeStorageKey = "portfolio-template-theme";
+const scrollRevealSelector =
+  ".profile-panel, .quick-facts > div, .split-section > *, .section-heading, .timeline-card, .skill-group, .project-card, .highlight-card, .contact-section > *, .contact-card";
+let scrollRevealObserver;
+let polaroidTimer;
 
 function select(selector) {
   return document.querySelector(selector);
@@ -76,9 +80,9 @@ function applyBasics() {
   setText("#heroEyebrow", content.hero?.eyebrow || "Personal Portfolio");
   setText("#heroTitle", content.hero?.title || "Hi, I am Your Name.");
   setText("#heroIntro", content.hero?.intro || "");
-  setText("#aboutHeading", content.about?.heading || "About me");
   setText("#contactHeading", content.contact?.heading || "Say hello.");
   setText("#contactIntro", content.contact?.intro || "");
+  setText("#portraitCredit", content.portraitCredit || "");
   setText("#copyrightYear", new Date().getFullYear());
 
   const resumeLink = select("#resumeLink");
@@ -92,6 +96,20 @@ function applyBasics() {
   }
 
   renderProfileVisual(initials);
+  renderBrandVisual(initials);
+}
+
+function getAvatarSource() {
+  const avatarImages = content.avatarImages || {};
+  const theme = root.dataset.theme === "dark" ? "dark" : "light";
+
+  return (
+    avatarImages[theme] ||
+    avatarImages.light ||
+    avatarImages.dark ||
+    content.avatarImage ||
+    ""
+  );
 }
 
 function renderProfileVisual(initials) {
@@ -99,17 +117,53 @@ function renderProfileVisual(initials) {
   if (!visual) return;
 
   empty(visual);
-  if (content.avatarImage) {
-    const image = createElement("img");
-    image.src = content.avatarImage;
+  const avatarImages = content.avatarImages || {};
+  const hasAvatar = avatarImages.light || avatarImages.dark || content.avatarImage;
+
+  if (hasAvatar) {
+    const image = createElement("img", "profile-image");
     image.alt = `${content.name || "Profile"} portrait`;
     visual.appendChild(image);
     visual.classList.add("has-image");
+    updateProfileImage();
     return;
   }
 
   visual.classList.remove("has-image");
   visual.appendChild(createElement("span", "", initials));
+}
+
+function updateProfileImage() {
+  const image = select("#profileVisual .profile-image");
+  if (!image) return;
+
+  image.src = getAvatarSource();
+}
+
+function renderBrandVisual(initials) {
+  const brandMark = select("#brandInitials");
+  if (!brandMark) return;
+
+  empty(brandMark);
+  if (getAvatarSource()) {
+    const image = createElement("img", "brand-image");
+    image.alt = "";
+    brandMark.appendChild(image);
+    updateBrandImage();
+    return;
+  }
+
+  brandMark.textContent = initials;
+}
+
+function updateBrandImage() {
+  const image = select("#brandInitials .brand-image");
+  if (image) image.src = getAvatarSource();
+}
+
+function updateThemeImages() {
+  updateProfileImage();
+  updateBrandImage();
 }
 
 function renderQuickFacts() {
@@ -141,13 +195,114 @@ function renderAbout() {
   const container = select("#aboutText");
   empty(container);
 
-  normalizeItems(content.about?.paragraphs).forEach(paragraph => {
-    container.appendChild(createElement("p", "", paragraph));
+  const paragraphs = normalizeItems(content.about?.paragraphs);
+  paragraphs.forEach((paragraph, index) => {
+    const text = createElement("p", "", paragraph);
+    const emoji = content.about?.endingEmoji;
+
+    if (emoji?.image && index === paragraphs.length - 1) {
+      const image = createElement("img", "inline-emoji");
+      image.src = emoji.image;
+      image.alt = emoji.alt || "";
+      text.append(" ");
+      text.appendChild(image);
+    }
+
+    container.appendChild(text);
   });
+
+  renderAboutPhotos();
+}
+
+function renderAboutPhotos() {
+  const stack = select("#aboutPhotoStack");
+  if (!stack) return;
+
+  empty(stack);
+  const photos = normalizeItems(content.about?.photos).filter(photo => photo?.image);
+  const visual = stack.closest(".about-visual");
+  const section = stack.closest(".split-section");
+
+  visual?.toggleAttribute("hidden", !photos.length);
+  section?.classList.toggle("about-without-photos", !photos.length);
+
+  photos.forEach((photo, index) => {
+    const card = createElement("figure", "polaroid-card");
+    card.dataset.photoIndex = String(index);
+    card.classList.toggle("has-caption", Boolean(photo.caption));
+
+    const photoArea = createElement("div", "polaroid-photo");
+    const image = createElement("img");
+    image.src = photo.image;
+    image.alt = photo.alt || photo.caption || `Photo ${index + 1}`;
+    image.loading = index === 0 ? "eager" : "lazy";
+    image.decoding = "async";
+    if (photo.position) image.style.objectPosition = photo.position;
+    if (photo.zoom) image.style.transform = `scale(${photo.zoom})`;
+    photoArea.appendChild(image);
+
+    card.appendChild(photoArea);
+    if (photo.caption) {
+      card.appendChild(createElement("figcaption", "", photo.caption));
+    }
+    stack.appendChild(card);
+  });
+
+  updatePolaroidStack(0);
+}
+
+function updatePolaroidStack(frontIndex) {
+  const cards = selectAll("#aboutPhotoStack .polaroid-card");
+  if (!cards.length) return;
+
+  cards.forEach((card, index) => {
+    const position = (index - frontIndex + cards.length) % cards.length;
+    card.dataset.position = String(position);
+    card.classList.toggle("is-front", position === 0);
+  });
+}
+
+function advancePolaroidStack() {
+  const cards = selectAll("#aboutPhotoStack .polaroid-card");
+  if (!cards.length) return;
+
+  const currentIndex = cards.findIndex(card => card.classList.contains("is-front"));
+  updatePolaroidStack((currentIndex + 1) % cards.length);
+}
+
+function initPolaroidStack() {
+  const stack = select("#aboutPhotoStack");
+  const cards = selectAll("#aboutPhotoStack .polaroid-card");
+  if (!stack || cards.length < 2) return;
+
+  const startRotation = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    window.clearInterval(polaroidTimer);
+    polaroidTimer = window.setInterval(advancePolaroidStack, 3600);
+  };
+
+  stack.addEventListener("click", () => {
+    advancePolaroidStack();
+    startRotation();
+  });
+  stack.addEventListener("keydown", event => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    advancePolaroidStack();
+    startRotation();
+  });
+  stack.addEventListener("mouseenter", () => window.clearInterval(polaroidTimer));
+  stack.addEventListener("mouseleave", startRotation);
+  stack.addEventListener("focus", () => window.clearInterval(polaroidTimer));
+  stack.addEventListener("blur", startRotation);
+  startRotation();
 }
 
 function renderTimeline(filter = "all") {
   const container = select("#timelineList");
+  if (scrollRevealObserver && container) {
+    selectAll("#timelineList .reveal-item").forEach(item => scrollRevealObserver.unobserve(item));
+  }
   empty(container);
 
   normalizeItems(content.timeline)
@@ -172,6 +327,8 @@ function renderTimeline(filter = "all") {
       if (highlights.children.length) card.appendChild(highlights);
       container.appendChild(card);
     });
+
+  refreshScrollReveal();
 }
 
 function initTimelineFilters() {
@@ -206,9 +363,34 @@ function renderProjects() {
   const container = select("#projectsGrid");
   empty(container);
 
-  normalizeItems(content.projects).forEach((project, index) => {
+  const statusDetails = {
+    complete: { label: "Complete", priority: 0 },
+    "in-progress": { label: "In Progress", priority: 1 },
+    "coming-soon": { label: "Coming Soon", priority: 2 }
+  };
+
+  const projects = normalizeItems(content.projects)
+    .map((project, originalIndex) => ({ project, originalIndex }))
+    .sort((a, b) => {
+      const aPriority = statusDetails[a.project.status]?.priority ?? 2;
+      const bPriority = statusDetails[b.project.status]?.priority ?? 2;
+      return aPriority - bPriority || a.originalIndex - b.originalIndex;
+    });
+
+  projects.forEach(({ project }, index) => {
     const card = createElement("article", "project-card");
     const media = createElement("div", "project-media");
+    const status = statusDetails[project.status];
+
+    if (status?.label && project.status !== "complete") {
+      card.classList.add("project-card-unfinished", `project-status-${project.status}`);
+      media.appendChild(createElement("span", "project-stamp", status.label));
+    }
+
+    if (project.status === "complete") {
+      card.classList.add("project-card-complete");
+      media.appendChild(createElement("span", "project-stamp project-stamp-complete", status.label));
+    }
 
     if (project.image) {
       const image = createElement("img");
@@ -216,7 +398,7 @@ function renderProjects() {
       image.alt = `${project.title || "Project"} preview`;
       media.appendChild(image);
     } else {
-      media.appendChild(createElement("span", "", `0${index + 1}`));
+      media.appendChild(createElement("span", "project-number", `0${index + 1}`));
     }
 
     const body = createElement("div", "project-body");
@@ -250,7 +432,7 @@ function renderHighlights() {
   empty(container);
 
   const highlights = normalizeItems(content.highlights);
-  if (!highlights.length) {
+  if (content.showHighlights === false || !highlights.length) {
     section?.setAttribute("hidden", "");
     return;
   }
@@ -291,6 +473,7 @@ function initThemeToggle() {
           localStorage.setItem(themeStorageKey, "dark");
         }
       } catch (error) {}
+      updateThemeImages();
     });
   });
 }
@@ -338,6 +521,32 @@ function initActiveNav() {
   sections.forEach(section => observer.observe(section));
 }
 
+function refreshScrollReveal() {
+  if (!scrollRevealObserver) return;
+
+  selectAll(scrollRevealSelector).forEach(item => {
+    if (item.classList.contains("reveal-item")) return;
+    item.classList.add("reveal-item");
+    scrollRevealObserver.observe(item);
+  });
+}
+
+function initScrollReveal() {
+  if (!("IntersectionObserver" in window)) return;
+
+  scrollRevealObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+  );
+
+  document.body.classList.add("reveal-ready");
+  refreshScrollReveal();
+}
+
 function init() {
   applyBasics();
   renderQuickFacts();
@@ -348,10 +557,12 @@ function init() {
   renderProjects();
   renderHighlights();
   renderContact();
+  initPolaroidStack();
   initTimelineFilters();
   initThemeToggle();
   initMobileMenu();
   initActiveNav();
+  initScrollReveal();
 }
 
 init();

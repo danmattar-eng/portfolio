@@ -3,10 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A beginner-friendly personal portfolio starter.">
+    <meta name="description" content="Danny Mattar's personal portfolio. Computer Engineering student building toward software, robotics, automation, and smart systems.">
     <meta name="theme-color" content="#f6f7f8">
-    <title>Portfolio Starter</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Danny Mattar | Portfolio">
+    <meta property="og:description" content="Computer Engineering student building toward software, robotics, automation, and smart systems.">
+    <meta property="og:image" content="assets/images/profile-light.png">
+    <title>Danny Mattar | Portfolio</title>
+    <link rel="icon" href="assets/images/profile-light.png" type="image/png">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="theme.css">
     <script>
       (() => {
         try {
@@ -20,14 +26,10 @@
     <script defer src="script.js"></script>
   </head>
   <body>
-    <!--
-      Starter portfolio template adapted from Noah Hathout's portfolio repo.
-      Replace the sample content in content.js before publishing.
-    -->
     <header class="site-header">
       <a class="brand" href="#home" aria-label="Go to home">
-        <span class="brand-mark" id="brandInitials">YN</span>
-        <span id="brandName">Your Name</span>
+        <span class="brand-mark" id="brandInitials">DM</span>
+        <span id="brandName">Danny Mattar</span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -62,14 +64,14 @@
     <main id="home">
       <section class="hero section">
         <div class="hero-copy">
-          <p class="eyebrow" id="heroEyebrow">Portfolio Starter</p>
-          <h1 id="heroTitle">Build a portfolio that sounds like you.</h1>
+          <p class="eyebrow" id="heroEyebrow">Computer Engineering / Builder</p>
+          <h1 id="heroTitle">I am Danny Mattar.</h1>
           <p class="hero-intro" id="heroIntro">
-            Replace this starter text with a quick introduction about who you are,
-            what you are learning, and what you want people to remember.
+            I am a Computer Engineering student at the University of Cincinnati,
+            learning how to build things that connect software, hardware, and the physical world.
           </p>
           <div class="hero-actions">
-            <a class="button primary" id="resumeLink" href="#" target="_blank" rel="noopener noreferrer">Resume</a>
+            <a class="button primary" id="resumeLink" href="assets/files/resume.pdf" target="_blank" rel="noopener noreferrer" hidden>Resume</a>
             <a class="button secondary" href="#contact">Contact</a>
           </div>
           <dl class="quick-facts" id="quickFacts"></dl>
@@ -77,20 +79,21 @@
 
         <aside class="profile-panel" aria-label="Profile summary">
           <div class="profile-visual" id="profileVisual">
-            <span id="profileInitials">YN</span>
+            <span id="profileInitials">DM</span>
           </div>
+          <p class="portrait-credit" id="portraitCredit">Drawing inspired by @Ali Sabet</p>
           <div>
-            <p class="profile-name" id="profileName">Your Name</p>
-            <p class="profile-role" id="profileRole">Student and builder</p>
+            <p class="profile-name" id="profileName">Danny Mattar</p>
+            <p class="profile-role" id="profileRole">Computer Engineering student building toward software, robotics, and smart systems</p>
           </div>
           <div class="social-links" id="socialLinks"></div>
         </aside>
       </section>
 
       <section class="section split-section" id="about">
-        <div>
+        <div class="about-visual">
           <p class="eyebrow">About</p>
-          <h2 id="aboutHeading">A short, specific intro works best.</h2>
+          <div class="polaroid-stack" id="aboutPhotoStack" role="button" tabindex="0" aria-label="Show next photo"></div>
         </div>
         <div class="section-copy" id="aboutText"></div>
       </section>
@@ -99,7 +102,7 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">Timeline</p>
-            <h2>Education and Experience</h2>
+            <h2>Path So Far</h2>
           </div>
           <div class="filter-buttons" aria-label="Filter timeline">
             <button class="filter-button is-active" type="button" data-filter="all">All</button>
@@ -116,7 +119,7 @@
             <p class="eyebrow">Skills</p>
             <h2>Tools and Focus Areas</h2>
           </div>
-          <p class="heading-note">Group skills by topic so visitors can scan quickly.</p>
+          <p class="heading-note">A practical stack now, with room for the robotics side to grow.</p>
         </div>
         <div class="skills-grid" id="skillsGrid"></div>
       </section>
@@ -125,9 +128,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">Projects</p>
-            <h2>Selected Work</h2>
+            <h2>The Gallery</h2>
           </div>
-          <p class="heading-note">Start with three strong projects. Add more when each has a clear story.</p>
+          <p class="heading-note">An ever-growing list.</p>
         </div>
         <div class="projects-grid" id="projectsGrid"></div>
       </section>
@@ -136,7 +139,7 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">Highlights</p>
-            <h2>Awards, Clubs, and Certifications</h2>
+            <h2>Awards</h2>
           </div>
         </div>
         <div class="highlight-grid" id="highlightsGrid"></div>
@@ -147,7 +150,7 @@
           <p class="eyebrow">Contact</p>
           <h2 id="contactHeading">Say hello.</h2>
           <p id="contactIntro">
-            Add the best places for people to reach you.
+            I am looking for Summer 2027 internship and co-op opportunities, especially around software, robotics, automation, and smart systems.
           </p>
         </div>
         <div class="contact-links" id="contactLinks"></div>
@@ -156,9 +159,15 @@
 
     <footer class="site-footer">
       <p>
-        <span id="footerName">Your Name</span>
+        <span id="footerName">Danny Mattar</span>
         <span aria-hidden="true"> / </span>
         <span id="copyrightYear"></span>
+      </p>
+      <p class="template-credit">
+        Starter template by
+        <a href="https://github.com/nhathout/portfolio" target="_blank" rel="noopener noreferrer" aria-label="Noah Hathout's original portfolio template on GitHub">
+          <img src="assets/images/noah-pixel-logo.jpg" alt="Noah Hathout">
+        </a>
       </p>
       <a href="#home">Back to top</a>
     </footer>
