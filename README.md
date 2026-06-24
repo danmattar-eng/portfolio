@@ -2,12 +2,12 @@
 
 Source for My personal portfolio website.
 
-The launch-ready site is in [`portfolio-starter-template/`](portfolio-starter-template/). It uses plain HTML, CSS, and JavaScript and has no build step.
+The launch-ready site is in [`docs/`](docs/). It uses plain HTML, CSS, and JavaScript and has no build step. The `docs` location is ready for GitHub Pages deployment from the `main` branch.
 
 ## Preview locally
 
 ```sh
-cd portfolio-starter-template
+cd docs
 python3 -m http.server 4173
 ```
 
