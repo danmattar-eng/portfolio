@@ -1,14 +1,16 @@
-# Noah's Portfolio
+# Danny Mattar — Portfolio
 
-![Maintained Badge](https://img.shields.io/badge/maintained-yes-brightgreen)
-![Website Status](https://img.shields.io/badge/website-live-green)
+Source for My personal portfolio website.
 
-Welcome to the repo containing my personal portfolio website/project.
+The launch-ready site is in [`docs/`](docs/). It uses plain HTML, CSS, and JavaScript and has no build step. The `docs` location is ready for GitHub Pages deployment from the `main` branch.
 
-## Starter Template
+## Preview locally
 
-I also keep a starter template in [`portfolio-starter-template/`](portfolio-starter-template/) for people who want a simple portfolio template without copying my exact site, content, styling, resume files, or assets.
+```sh
+cd docs
+python3 -m http.server 4173
+```
 
-Best use: copy only the contents of `portfolio-starter-template/` into a new repo, edit `content.js`, and publish that new repo with GitHub Pages.
+Then open `http://localhost:4173`.
 
-If this starter helps you, a repo star or source-code credit is much appreciated :)
+The site remains local until it is intentionally published.
