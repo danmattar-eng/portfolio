@@ -65,7 +65,7 @@ window.PORTFOLIO_CONTENT = {
       "I moved to the U.S. from Egypt, and that background is a big part of how I see people, work, and opportunity. It pushed me to adapt quickly, stay curious, and bring a wider perspective into the spaces I am part of.",
       "My college path started at Purdue Fort Wayne, where I earned Dean's List honors before transferring to UC. Cincinnati's co-op program is one of the main reasons I chose UC, because I want my engineering education to stay connected to real work, real teams, and real systems.",
       "Right now, I am looking for internship, co-op, work, and project opportunities where I can keep learning through practical problems. The areas that pull my attention most are AI, robotics, smart systems, automation, and technology that connects software with the physical world.",
-      "Outside of engineering, you can usually find me playing volleyball, climbing, wandering through a city, or finding some excuse to be outside. If the opportunity shows up, I am also very down to trade dry land for deep sea exploration."
+      "Outside of engineering, you can usually find me playing volleyball, climbing, wandering through a city, or finding some excuse to be outside. If the opportunity shows up, I'll trade dry land for deep sea exploration any day."
     ]
   },
 
